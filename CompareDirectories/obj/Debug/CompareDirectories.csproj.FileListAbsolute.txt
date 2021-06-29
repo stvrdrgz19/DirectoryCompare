@@ -1,0 +1,10 @@
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\bin\Debug\CompareDirectories.exe.config
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\bin\Debug\CompareDirectories.exe
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\bin\Debug\CompareDirectories.pdb
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.csprojAssemblyReference.cache
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.Form1.resources
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.Properties.Resources.resources
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.csproj.GenerateResource.cache
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.csproj.CoreCompileInputs.cache
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.exe
+C:\Users\steve.rodriguez\source\repos\CompareDirectories\CompareDirectories\obj\Debug\CompareDirectories.pdb
