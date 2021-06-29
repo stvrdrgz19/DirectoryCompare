@@ -192,6 +192,18 @@ namespace CompareDirectories
         {
             //tbDirectoryOne.Text = @"C:\Program Files (x86)\SalesPad.Desktop\Release\5.2.7";
             //tbDirectoryTwo.Text = @"C:\Program Files (x86)\SalesPad.Desktop\master\5.2.8.13";
+            ColumnHeader fileName = new ColumnHeader();
+            fileName.Name = "chFileName";
+            fileName.Text = "File Name";
+            fileName.Width = 398;
+            fileName.TextAlign = HorizontalAlignment.Left;
+            lvCompare.Columns.Add(fileName);
+            ColumnHeader notInColumn = new ColumnHeader();
+            notInColumn.Name = "chNotInColumn";
+            notInColumn.Text = "Not Found In";
+            notInColumn.Width = 375;
+            notInColumn.TextAlign = HorizontalAlignment.Left;
+            lvCompare.Columns.Add(notInColumn);
         }
 
         private void BtnDirectoryOne_Click(object sender, EventArgs e)
@@ -236,15 +248,17 @@ namespace CompareDirectories
                 cbFindMissingFiles.Checked = true;
                 cbFindDuplicates.Checked = false;
                 lvCompare.Columns[0].Width = 398;
-                ColumnHeader colHeaderX = new ColumnHeader();
-                colHeaderX.Name = "Not Found In";
-                colHeaderX.Width = 375;
-                colHeaderX.TextAlign = HorizontalAlignment.Left;
-                colHeaderX.Text = "Not Found In";
-                this.lvCompare.Columns.Add(colHeaderX);
-                lvCompare.Columns[1].Width = 375;
+                //if (!lvCompare.Columns.Contains(chNotInColumn))
+                //{
+                    ColumnHeader notInColumn = new ColumnHeader();
+                    notInColumn.Name = "chNotInColumn";
+                    notInColumn.Text = "Not Found In";
+                    notInColumn.Width = 375;
+                    notInColumn.TextAlign = HorizontalAlignment.Left;
+                    lvCompare.Columns.Add(notInColumn);
+                //}
+
                 lvCompare.Items.Clear();
-                lvCompare.Refresh();
             }
             canModifyDup = true;
             return;
@@ -263,9 +277,9 @@ namespace CompareDirectories
                 //  I think it's because I have a default set initially
                 //  When when re-adding it's using a different method
                 //      Fix is TODO
-                var removeCol = lvCompare.Columns["Not Found In"];
+                var removeCol = lvCompare.Columns["chNotInColumn"];
                 lvCompare.Columns.Remove(removeCol);
-                lvCompare.Columns.Remove(chNotInColumn);
+                //lvCompare.Columns.Remove(chNotInColumn);
                 //===============================================================
                 lvCompare.Columns[0].Width = 773;
                 lvCompare.Items.Clear();

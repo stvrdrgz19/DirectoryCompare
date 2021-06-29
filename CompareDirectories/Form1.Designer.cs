@@ -36,8 +36,6 @@
             this.lbDirOne = new System.Windows.Forms.ListBox();
             this.lbDirTwo = new System.Windows.Forms.ListBox();
             this.lvCompare = new System.Windows.Forms.ListView();
-            this.chFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chNotInColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnPopulateList = new System.Windows.Forms.Button();
             this.tbCountDirOne = new System.Windows.Forms.TextBox();
             this.tbCountDirTwo = new System.Windows.Forms.TextBox();
@@ -103,9 +101,6 @@
             // 
             // lvCompare
             // 
-            this.lvCompare.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chFileName,
-            this.chNotInColumn});
             this.lvCompare.FullRowSelect = true;
             this.lvCompare.GridLines = true;
             this.lvCompare.HideSelection = false;
@@ -115,16 +110,6 @@
             this.lvCompare.TabIndex = 6;
             this.lvCompare.UseCompatibleStateImageBehavior = false;
             this.lvCompare.View = System.Windows.Forms.View.Details;
-            // 
-            // chFileName
-            // 
-            this.chFileName.Text = "File Name";
-            this.chFileName.Width = 398;
-            // 
-            // chNotInColumn
-            // 
-            this.chNotInColumn.Text = "Not Found In";
-            this.chNotInColumn.Width = 375;
             // 
             // btnPopulateList
             // 
@@ -266,8 +251,6 @@
         private System.Windows.Forms.ListBox lbDirOne;
         private System.Windows.Forms.ListBox lbDirTwo;
         private System.Windows.Forms.ListView lvCompare;
-        private System.Windows.Forms.ColumnHeader chFileName;
-        private System.Windows.Forms.ColumnHeader chNotInColumn;
         private System.Windows.Forms.Button btnPopulateList;
         private System.Windows.Forms.TextBox tbCountDirOne;
         private System.Windows.Forms.TextBox tbCountDirTwo;
