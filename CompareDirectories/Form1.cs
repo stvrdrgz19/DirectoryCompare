@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -69,12 +70,31 @@ namespace CompareDirectories
             }
         }
 
-        private void BtnPopulateList_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Adds columns to the lvCompare listview
+        /// </summary>
+        /// <param name="name">The name of the column header</param>
+        /// <param name="text">The text to display as the column header</param>
+        /// <param name="width">Width of the added column</param>
+        /// <param name="alignment">Alignment of the text eg. HorizontalAlignment.Left</param>
+        /// <returns>returns the information needed to add a column</returns>
+        private static ColumnHeader AddColumn(string name, string text, int width, HorizontalAlignment alignment)
+        {
+            //object initializer syntax
+            //syntatic sugar
+            return new ColumnHeader()
+            {
+                Name = name,
+                Text = text,
+                Width = width,
+                TextAlign = alignment
+            };
+        }
+
+        private void RunCompare(string dirOne, string dirTwo)
         {
             lvCompare.Items.Clear();
             tbCompareCount.Text = "0 Files";
-            string dirOne = tbDirectoryOne.Text;
-            string dirTwo = tbDirectoryTwo.Text;
             bool searchSubDir = cbSubDir.Checked;
             //  MAKE SURE THE PROVIDED PATHS ARE VALID/EXIST
             if (String.IsNullOrWhiteSpace(dirOne) || String.IsNullOrWhiteSpace(dirTwo))
@@ -115,7 +135,6 @@ namespace CompareDirectories
             }
 
             //  ADD FILES FROM DIRECTORIES TO THEIR RESPECTIVE LISTBOXES
-            //  INCREMENT FILE COUNT
             lbDirOne.Items.Clear();
             lbDirTwo.Items.Clear();
             lbDirOne.Items.AddRange(GetFileList(dirOne, searchSubDir));
@@ -185,30 +204,70 @@ namespace CompareDirectories
                 }
             }
             tbCompareCount.Text = lvCompare.Items.Count.ToString() + " files";
-            return;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //tbDirectoryOne.Text = @"C:\Program Files (x86)\SalesPad.Desktop\Release\5.2.7";
-            //tbDirectoryTwo.Text = @"C:\Program Files (x86)\SalesPad.Desktop\master\5.2.8.13";
-            ColumnHeader fileName = new ColumnHeader();
-            fileName.Name = "chFileName";
-            fileName.Text = "File Name";
-            fileName.Width = 398;
-            fileName.TextAlign = HorizontalAlignment.Left;
-            lvCompare.Columns.Add(fileName);
-            ColumnHeader notInColumn = new ColumnHeader();
-            notInColumn.Name = "chNotInColumn";
-            notInColumn.Text = "Not Found In";
-            notInColumn.Width = 375;
-            notInColumn.TextAlign = HorizontalAlignment.Left;
-            lvCompare.Columns.Add(notInColumn);
+            tbDirectoryOne.Text = @"C:\Program Files (x86)\SalesPad.Desktop\Release\5.2.7";
+            tbDirectoryTwo.Text = @"C:\Program Files (x86)\SalesPad.Desktop\master\5.2.8.13";
+            lvCompare.Columns.Add(AddColumn("chFileName", "File Name", 398, HorizontalAlignment.Left));
+            lvCompare.Columns.Add(AddColumn("chNotInColumn", "Not Found In", 375, HorizontalAlignment.Left));
+        }
+
+        private void CbFindMissingFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            canModifyDup = false;
+            if (canModifyMissing)
+            {
+                cbFindMissingFiles.Checked = true;
+                cbFindDuplicates.Checked = false;
+                lvCompare.Columns[0].Width = 398;
+                if (lvCompare.Columns.Count == 1)
+                {
+                    lvCompare.Columns.Add(AddColumn("chNotInColumn", "Not Found In", 375, HorizontalAlignment.Left));
+                }
+                lvCompare.Items.Clear();
+                RunCompare(tbDirectoryOne.Text, tbDirectoryTwo.Text);
+            }
+            canModifyDup = true;
+            return;
+        }
+
+        private void CbFindDuplicates_CheckedChanged(object sender, EventArgs e)
+        {
+            canModifyMissing = false;
+            if (canModifyDup)
+            {
+                cbFindDuplicates.Checked = true;
+                cbFindMissingFiles.Checked = false;
+                var removeCol = lvCompare.Columns["chNotInColumn"];
+                lvCompare.Columns.Remove(removeCol);
+                lvCompare.Columns[0].Width = 773;
+                lvCompare.Items.Clear();
+                RunCompare(tbDirectoryOne.Text, tbDirectoryTwo.Text);
+            }
+            canModifyMissing = true;
+            return;
+        }
+
+        private void BtnPopulateList_Click(object sender, EventArgs e)
+        {
+            RunCompare(tbDirectoryOne.Text, tbDirectoryTwo.Text);
+            return;
         }
 
         private void BtnDirectoryOne_Click(object sender, EventArgs e)
         {
-            string dirOne = GetPath(tbDirectoryOne.Text);
+            string input = tbDirectoryOne.Text;
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                if (Directory.Exists(input))
+                {
+                    Process.Start(input);
+                }
+                return;
+            }
+            string dirOne = GetPath(input);
             bool searchSubDir = cbSubDir.Checked;
             if (String.IsNullOrEmpty(dirOne))
             {
@@ -225,7 +284,16 @@ namespace CompareDirectories
 
         private void BtnDirectoryTwo_Click(object sender, EventArgs e)
         {
-            string dirTwo = GetPath(tbDirectoryTwo.Text);
+            string input = tbDirectoryTwo.Text;
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                if (Directory.Exists(input))
+                {
+                    Process.Start(input);
+                }
+                return;
+            }
+            string dirTwo = GetPath(input);
             bool searchSubDir = cbSubDir.Checked;
             if (String.IsNullOrEmpty(dirTwo))
             {
@@ -237,54 +305,6 @@ namespace CompareDirectories
             tbCountDirTwo.Text = lbDirTwo.Items.Count.ToString() + " files";
             lvCompare.Items.Clear();
             tbCompareCount.Text = "0 Files";
-            return;
-        }
-
-        private void CbFindMissingFiles_CheckedChanged(object sender, EventArgs e)
-        {
-            canModifyDup = false;
-            if (canModifyMissing)
-            {
-                cbFindMissingFiles.Checked = true;
-                cbFindDuplicates.Checked = false;
-                lvCompare.Columns[0].Width = 398;
-                //if (!lvCompare.Columns.Contains(chNotInColumn))
-                //{
-                    ColumnHeader notInColumn = new ColumnHeader();
-                    notInColumn.Name = "chNotInColumn";
-                    notInColumn.Text = "Not Found In";
-                    notInColumn.Width = 375;
-                    notInColumn.TextAlign = HorizontalAlignment.Left;
-                    lvCompare.Columns.Add(notInColumn);
-                //}
-
-                lvCompare.Items.Clear();
-            }
-            canModifyDup = true;
-            return;
-        }
-
-        private void CbFindDuplicates_CheckedChanged(object sender, EventArgs e)
-        {
-            canModifyMissing = false;
-            if (canModifyDup)
-            {
-                cbFindDuplicates.Checked = true;
-                cbFindMissingFiles.Checked = false;
-                //===============================================================
-                //  Gotta remove the column "twice"
-                //  Quotes because it's different methods of removing
-                //  I think it's because I have a default set initially
-                //  When when re-adding it's using a different method
-                //      Fix is TODO
-                var removeCol = lvCompare.Columns["chNotInColumn"];
-                lvCompare.Columns.Remove(removeCol);
-                //lvCompare.Columns.Remove(chNotInColumn);
-                //===============================================================
-                lvCompare.Columns[0].Width = 773;
-                lvCompare.Items.Clear();
-            }
-            canModifyMissing = true;
             return;
         }
 
