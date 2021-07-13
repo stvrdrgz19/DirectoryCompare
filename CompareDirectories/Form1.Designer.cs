@@ -45,6 +45,10 @@
             this.btnCopySelected = new System.Windows.Forms.Button();
             this.btnCopyAll = new System.Windows.Forms.Button();
             this.cbSubDir = new System.Windows.Forms.CheckBox();
+            this.tbDirOneFilter = new System.Windows.Forms.TextBox();
+            this.tbDirTwoFilter = new System.Windows.Forms.TextBox();
+            this.cbFilterText = new System.Windows.Forms.CheckBox();
+            this.cbFilterFile = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // tbDirectoryOne
@@ -86,7 +90,7 @@
             // lbDirOne
             // 
             this.lbDirOne.FormattingEnabled = true;
-            this.lbDirOne.Location = new System.Drawing.Point(2, 95);
+            this.lbDirOne.Location = new System.Drawing.Point(2, 118);
             this.lbDirOne.Name = "lbDirOne";
             this.lbDirOne.Size = new System.Drawing.Size(397, 199);
             this.lbDirOne.TabIndex = 4;
@@ -94,7 +98,7 @@
             // lbDirTwo
             // 
             this.lbDirTwo.FormattingEnabled = true;
-            this.lbDirTwo.Location = new System.Drawing.Point(401, 95);
+            this.lbDirTwo.Location = new System.Drawing.Point(401, 118);
             this.lbDirTwo.Name = "lbDirTwo";
             this.lbDirTwo.Size = new System.Drawing.Size(397, 199);
             this.lbDirTwo.TabIndex = 5;
@@ -104,7 +108,7 @@
             this.lvCompare.FullRowSelect = true;
             this.lvCompare.GridLines = true;
             this.lvCompare.HideSelection = false;
-            this.lvCompare.Location = new System.Drawing.Point(2, 320);
+            this.lvCompare.Location = new System.Drawing.Point(2, 343);
             this.lvCompare.Name = "lvCompare";
             this.lvCompare.Size = new System.Drawing.Size(796, 175);
             this.lvCompare.TabIndex = 6;
@@ -113,7 +117,7 @@
             // 
             // btnPopulateList
             // 
-            this.btnPopulateList.Location = new System.Drawing.Point(347, 496);
+            this.btnPopulateList.Location = new System.Drawing.Point(347, 519);
             this.btnPopulateList.Name = "btnPopulateList";
             this.btnPopulateList.Size = new System.Drawing.Size(107, 23);
             this.btnPopulateList.TabIndex = 7;
@@ -123,7 +127,7 @@
             // 
             // tbCountDirOne
             // 
-            this.tbCountDirOne.Location = new System.Drawing.Point(150, 73);
+            this.tbCountDirOne.Location = new System.Drawing.Point(150, 74);
             this.tbCountDirOne.Name = "tbCountDirOne";
             this.tbCountDirOne.ReadOnly = true;
             this.tbCountDirOne.Size = new System.Drawing.Size(100, 20);
@@ -133,7 +137,7 @@
             // 
             // tbCountDirTwo
             // 
-            this.tbCountDirTwo.Location = new System.Drawing.Point(549, 73);
+            this.tbCountDirTwo.Location = new System.Drawing.Point(549, 74);
             this.tbCountDirTwo.Name = "tbCountDirTwo";
             this.tbCountDirTwo.ReadOnly = true;
             this.tbCountDirTwo.Size = new System.Drawing.Size(100, 20);
@@ -143,7 +147,7 @@
             // 
             // tbCompareCount
             // 
-            this.tbCompareCount.Location = new System.Drawing.Point(350, 298);
+            this.tbCompareCount.Location = new System.Drawing.Point(350, 321);
             this.tbCompareCount.Name = "tbCompareCount";
             this.tbCompareCount.ReadOnly = true;
             this.tbCompareCount.Size = new System.Drawing.Size(100, 20);
@@ -179,7 +183,7 @@
             // 
             // btnCopySelected
             // 
-            this.btnCopySelected.Location = new System.Drawing.Point(2, 496);
+            this.btnCopySelected.Location = new System.Drawing.Point(2, 519);
             this.btnCopySelected.Name = "btnCopySelected";
             this.btnCopySelected.Size = new System.Drawing.Size(100, 23);
             this.btnCopySelected.TabIndex = 14;
@@ -189,7 +193,7 @@
             // 
             // btnCopyAll
             // 
-            this.btnCopyAll.Location = new System.Drawing.Point(104, 496);
+            this.btnCopyAll.Location = new System.Drawing.Point(104, 519);
             this.btnCopyAll.Name = "btnCopyAll";
             this.btnCopyAll.Size = new System.Drawing.Size(100, 23);
             this.btnCopyAll.TabIndex = 15;
@@ -209,11 +213,57 @@
             this.cbSubDir.Text = "Include Subdirectories";
             this.cbSubDir.UseVisualStyleBackColor = true;
             // 
+            // tbDirOneFilter
+            // 
+            this.tbDirOneFilter.Location = new System.Drawing.Point(2, 96);
+            this.tbDirOneFilter.Name = "tbDirOneFilter";
+            this.tbDirOneFilter.Size = new System.Drawing.Size(397, 20);
+            this.tbDirOneFilter.TabIndex = 17;
+            this.tbDirOneFilter.Text = "Filter out (semi-colon delimeted list)";
+            // 
+            // tbDirTwoFilter
+            // 
+            this.tbDirTwoFilter.Location = new System.Drawing.Point(401, 96);
+            this.tbDirTwoFilter.Name = "tbDirTwoFilter";
+            this.tbDirTwoFilter.Size = new System.Drawing.Size(397, 20);
+            this.tbDirTwoFilter.TabIndex = 18;
+            this.tbDirTwoFilter.Text = "Filter out (semi-colon delimeted list)";
+            // 
+            // cbFilterText
+            // 
+            this.cbFilterText.Appearance = System.Windows.Forms.Appearance.Button;
+            this.cbFilterText.AutoSize = true;
+            this.cbFilterText.Checked = true;
+            this.cbFilterText.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbFilterText.Location = new System.Drawing.Point(312, 1);
+            this.cbFilterText.Name = "cbFilterText";
+            this.cbFilterText.Size = new System.Drawing.Size(77, 23);
+            this.cbFilterText.TabIndex = 19;
+            this.cbFilterText.Text = "Filter out text";
+            this.cbFilterText.UseVisualStyleBackColor = true;
+            this.cbFilterText.CheckedChanged += new System.EventHandler(this.CbFilterText_CheckedChanged);
+            // 
+            // cbFilterFile
+            // 
+            this.cbFilterFile.Appearance = System.Windows.Forms.Appearance.Button;
+            this.cbFilterFile.AutoSize = true;
+            this.cbFilterFile.Location = new System.Drawing.Point(390, 1);
+            this.cbFilterFile.Name = "cbFilterFile";
+            this.cbFilterFile.Size = new System.Drawing.Size(73, 23);
+            this.cbFilterFile.TabIndex = 20;
+            this.cbFilterFile.Text = "Filter out file";
+            this.cbFilterFile.UseVisualStyleBackColor = true;
+            this.cbFilterFile.CheckedChanged += new System.EventHandler(this.CbFilterFile_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 521);
+            this.ClientSize = new System.Drawing.Size(800, 543);
+            this.Controls.Add(this.cbFilterFile);
+            this.Controls.Add(this.cbFilterText);
+            this.Controls.Add(this.tbDirTwoFilter);
+            this.Controls.Add(this.tbDirOneFilter);
             this.Controls.Add(this.cbSubDir);
             this.Controls.Add(this.btnCopyAll);
             this.Controls.Add(this.btnCopySelected);
@@ -260,6 +310,10 @@
         private System.Windows.Forms.Button btnCopySelected;
         private System.Windows.Forms.Button btnCopyAll;
         private System.Windows.Forms.CheckBox cbSubDir;
+        private System.Windows.Forms.TextBox tbDirOneFilter;
+        private System.Windows.Forms.TextBox tbDirTwoFilter;
+        private System.Windows.Forms.CheckBox cbFilterText;
+        private System.Windows.Forms.CheckBox cbFilterFile;
     }
 }
 

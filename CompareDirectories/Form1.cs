@@ -19,8 +19,11 @@ namespace CompareDirectories
             InitializeComponent();
         }
 
-        public static bool canModifyDup = true;
-        public static bool canModifyMissing = true;
+        private bool canModifyDup = true;
+        private bool canModifyMissing = true;
+        private bool filterString = true;
+        private bool filterFile = true;
+        public static char filterReplacementChar = '#';
 
         /// <summary>
         /// Retrieves a list of files from a directory
@@ -28,17 +31,39 @@ namespace CompareDirectories
         /// <param name="directory">The directory to get a list of files from</param>
         /// <param name="searchSubDir">Boolean to determine whether or not to search subdirectories</param>
         /// <returns>Returns a list of files from a directory</returns>
-        private static string[] GetFileList(string directory, bool searchSubDir)
+        private static string[] GetFileList(string directory, bool searchSubDir, string filter, bool filterText)
         {
+            int filterCharCount = filter.Count();
+            string replaceString = "";
+            for (int i = filterCharCount; i > 0; i--)
+            {
+                replaceString += "#";
+            }
             if (searchSubDir)
             {
-                var dllList = Directory.GetFiles(directory, "*", SearchOption.AllDirectories).Select(file => Path.GetFileName(file));
-                return dllList.ToArray();
+                if (filterText)
+                {
+                    var dllList = Directory.GetFiles(directory, "*", SearchOption.AllDirectories).Select(file => Path.GetFileName(file.Replace(filter, replaceString)));
+                    return dllList.ToArray();
+                }
+                else
+                {
+                    var dllList = Directory.GetFiles(directory, "*", SearchOption.AllDirectories).Where(file => !file.Contains(filter)).Select(file => Path.GetFileName(file));
+                    return dllList.ToArray();
+                }
             }
             else
             {
-                var dllList = Directory.GetFiles(directory, "*").Select(file => Path.GetFileName(file));
-                return dllList.ToArray();
+                if (filterText)
+                {
+                    var dllList = Directory.GetFiles(directory, "*").Select(file => Path.GetFileName(file.Replace(filter, replaceString)));
+                    return dllList.ToArray();
+                }
+                else
+                {
+                    var dllList = Directory.GetFiles(directory, "*").Where(file => !file.Contains(filter)).Select(file => Path.GetFileName(file));
+                    return dllList.ToArray();
+                }
             }
         }
 
@@ -137,8 +162,8 @@ namespace CompareDirectories
             //  ADD FILES FROM DIRECTORIES TO THEIR RESPECTIVE LISTBOXES
             lbDirOne.Items.Clear();
             lbDirTwo.Items.Clear();
-            lbDirOne.Items.AddRange(GetFileList(dirOne, searchSubDir));
-            lbDirTwo.Items.AddRange(GetFileList(dirTwo, searchSubDir));
+            lbDirOne.Items.AddRange(GetFileList(dirOne, searchSubDir, tbDirOneFilter.Text, cbFilterText.Checked));
+            lbDirTwo.Items.AddRange(GetFileList(dirTwo, searchSubDir, tbDirTwoFilter.Text, cbFilterText.Checked));
             tbCountDirOne.Text = lbDirOne.Items.Count.ToString() + " files";
             tbCountDirTwo.Text = lbDirTwo.Items.Count.ToString() + " files";
 
@@ -250,6 +275,30 @@ namespace CompareDirectories
             return;
         }
 
+        private void CbFilterText_CheckedChanged(object sender, EventArgs e)
+        {
+            filterFile = false;
+            if (filterString)
+            {
+                cbFilterText.Checked = true;
+                cbFilterFile.Checked = false;
+            }
+            filterFile = true;
+            return;
+        }
+
+        private void CbFilterFile_CheckedChanged(object sender, EventArgs e)
+        {
+            filterString = false;
+            if (filterFile)
+            {
+                cbFilterFile.Checked = true;
+                cbFilterText.Checked = false;
+            }
+            filterString = true;
+            return;
+        }
+
         private void BtnPopulateList_Click(object sender, EventArgs e)
         {
             RunCompare(tbDirectoryOne.Text, tbDirectoryTwo.Text);
@@ -275,7 +324,7 @@ namespace CompareDirectories
             }
             tbDirectoryOne.Text = dirOne;
             lbDirOne.Items.Clear();
-            lbDirOne.Items.AddRange(GetFileList(dirOne, searchSubDir));
+            lbDirOne.Items.AddRange(GetFileList(dirOne, searchSubDir, tbDirOneFilter.Text, cbFilterText.Checked));
             tbCountDirOne.Text = lbDirOne.Items.Count.ToString() + " files";
             lvCompare.Items.Clear();
             tbCompareCount.Text = "0 Files";
@@ -301,7 +350,7 @@ namespace CompareDirectories
             }
             tbDirectoryTwo.Text = dirTwo;
             lbDirTwo.Items.Clear();
-            lbDirTwo.Items.AddRange(GetFileList(dirTwo, searchSubDir));
+            lbDirTwo.Items.AddRange(GetFileList(dirTwo, searchSubDir, tbDirTwoFilter.Text, cbFilterText.Checked));
             tbCountDirTwo.Text = lbDirTwo.Items.Count.ToString() + " files";
             lvCompare.Items.Clear();
             tbCompareCount.Text = "0 Files";
